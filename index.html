@@ -191,8 +191,8 @@
       return -2;
     };
     var getWizardHeight = function(wizardWidth) {
-      return 1.337 * wizardWidth;
-
+      const WIZARD_ASPECT_RATIO = 1.337;
+      return WIZARD_ASPECT_RATIO * wizardWidth;
     };
 
     function getWizardX(width) {
