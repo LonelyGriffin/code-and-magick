@@ -1,17 +1,16 @@
-var CLOUM_START_POS = {
+var CLOUD_START_POS = {
   x: 100,
   y: 50
-}
+};
 
-var CLOUM_SHADOW_GAP = {
+var CLOUD_SHADOW_GAP = {
   x: 10,
   y: 10
-}
+};
 
 var maxValue = function (arr) {
   if (arr.length == 0) {
-    console.log("Array is empty");
-    return;
+    return undefined;
   }
 
   var maxElement = arr[0];
@@ -34,12 +33,34 @@ var renderCloud = function (ctx, x, y, color) {
   ctx.closePath();
   ctx.stroke();
   ctx.fill();
-}
+};
+
+var renderDiagram = function (ctx, x, y, width, heigth, color) {
+  ctx.fillStyle = color;
+  ctx.fillRect(x, y, width, heigth);
+};
+
+var renderColor = function (playerName) {
+  var colorDiagram;
+  if (playerName === 'Вы') {
+    colorDiagram = 'rgba(255, 0, 0, 1)';
+  } else {
+    var saturation = Math.random(1) * 100;
+    colorDiagram = 'hsl(250, ' + saturation + '%, 50%';
+  }
+  return colorDiagram;
+};
+
+var renderText = function (ctx, text, x, y, color) {
+  ctx.fillStyle = color;
+  ctx.textAlign = 'center';
+  ctx.fillText(text, x, y);
+};
 
 var renderColumns = function (ctx, names, times) {
   var DIAGRAM_POS = {
-    x: CLOUM_START_POS.x + 110,
-    y: CLOUM_START_POS.y + 190
+    x: CLOUD_START_POS.x + 110,
+    y: CLOUD_START_POS.y + 190
   };
   var DIAGRAM_WIDTH = 40;
   var DIAGRAM_MAX_HEIGHT = 150;
@@ -53,30 +74,23 @@ var renderColumns = function (ctx, names, times) {
   for (i = 0; i < names.length; i++) {
     var diagramX = DIAGRAM_POS.x + (DIAGRAM_WIDTH + DIAGRAM_GAP) * i;
     var diagramY = DIAGRAM_POS.y;
-    var columnHeight = (-DIAGRAM_MAX_HEIGHT * times[i]) / maxTime
-    ctx.fillStyle = 'black';
-    ctx.textAlign = 'center';
-    ctx.fillText(Math.round(times[i]), diagramX + (DIAGRAM_WIDTH / 2),DIAGRAM_POS.y + columnHeight - PLAYER_TIME_GAP_Y);
-    ctx.fillText(names[i], diagramX + (DIAGRAM_WIDTH / 2), DIAGRAM_POS.y + PLAYER_NAME_GAP_Y);
-    var saturation = Math.random(1) * 100;
-    ctx.fillStyle = 'hsl(250, ' + saturation + '%, 50%';
-    if (names[i] === 'Вы') {
-      ctx.fillStyle = 'rgba(255, 0, 0, 1)';
-    }
-    ctx.fillRect(diagramX, diagramY, DIAGRAM_WIDTH, columnHeight);
+    var columnHeight = (-DIAGRAM_MAX_HEIGHT * times[i]) / maxTime;
+    renderText(ctx, Math.round(times[i]), diagramX + (DIAGRAM_WIDTH / 2),DIAGRAM_POS.y + columnHeight - PLAYER_TIME_GAP_Y, 'black');
+    renderText(ctx, names[i], diagramX + (DIAGRAM_WIDTH / 2), DIAGRAM_POS.y + PLAYER_NAME_GAP_Y, 'black');
+    renderDiagram(ctx, diagramX, diagramY, DIAGRAM_WIDTH, columnHeight, renderColor(names[i]));
   }
-}
+};
 
 window.renderStatistics = function (ctx, names, times) {
-  renderCloud(ctx, CLOUM_START_POS.x + CLOUM_SHADOW_GAP.x, CLOUM_START_POS.y + CLOUM_SHADOW_GAP.y,'rgba(115, 115, 115, 0.7)' );
-  renderCloud(ctx, CLOUM_START_POS.x, CLOUM_START_POS.y,'#fff' );
+  renderCloud(ctx, CLOUD_START_POS.x + CLOUD_SHADOW_GAP.x, CLOUD_START_POS.y + CLOUD_SHADOW_GAP.y,'rgba(115, 115, 115, 0.7)' );
+  renderCloud(ctx, CLOUD_START_POS.x, CLOUD_START_POS.y,'#fff' );
 
   ctx.font = '16px PT Mono';
   ctx.fillStyle = 'black';
   ctx.textAlign = 'center';
-  ctx.fillText('Ура вы победили!', CLOUM_START_POS.x + 255, CLOUM_START_POS.y - 10);
+  ctx.fillText('Ура вы победили!', CLOUD_START_POS.x + 255, CLOUD_START_POS.y - 10);
   ctx.textAlign = 'center';
-  ctx.fillText('Список результатов:', CLOUM_START_POS.x + 255, CLOUM_START_POS.y + 10);
+  ctx.fillText('Список результатов:', CLOUD_START_POS.x + 255, CLOUD_START_POS.y + 10);
 
   renderColumns(ctx, names, times);
 }
