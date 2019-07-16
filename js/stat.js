@@ -35,11 +35,6 @@ var renderCloud = function (ctx, x, y, color) {
   ctx.fill();
 };
 
-var renderDiagram = function (ctx, x, y, width, heigth, color) {
-  ctx.fillStyle = color;
-  ctx.fillRect(x, y, width, heigth);
-};
-
 var renderColor = function (playerName) {
   var colorDiagram;
   if (playerName === 'Вы') {
@@ -51,10 +46,17 @@ var renderColor = function (playerName) {
   return colorDiagram;
 };
 
-var renderText = function (ctx, text, x, y, color) {
-  ctx.fillStyle = color;
+var renderDiagram = function (ctx, data) {
+  var PLAYER_NAME_GAP_Y = 20;
+  var PLAYER_TIME_GAP_Y = 10;
+
+  ctx.fillStyle = renderColor(data.text);
+  ctx.fillRect(data.diagramX, data.diagramY, data.width, data.height);
+
+  ctx.fillStyle = data.color;
   ctx.textAlign = 'center';
-  ctx.fillText(text, x, y);
+  ctx.fillText(data.text, data.diagramX +(data.width / 2), data.diagramY + PLAYER_NAME_GAP_Y);
+  ctx.fillText(Math.round(data.times), data.diagramX +(data.width / 2), data.diagramY + data.height - PLAYER_TIME_GAP_Y);
 };
 
 var renderColumns = function (ctx, names, times) {
@@ -66,18 +68,19 @@ var renderColumns = function (ctx, names, times) {
   var DIAGRAM_MAX_HEIGHT = 150;
   var DIAGRAM_GAP = 50;
 
-  var PLAYER_NAME_GAP_Y = 20;
-  var PLAYER_TIME_GAP_Y = 10;
-
   var maxTime = maxValue(times);
 
   for (i = 0; i < names.length; i++) {
-    var diagramX = DIAGRAM_POS.x + (DIAGRAM_WIDTH + DIAGRAM_GAP) * i;
-    var diagramY = DIAGRAM_POS.y;
-    var columnHeight = (-DIAGRAM_MAX_HEIGHT * times[i]) / maxTime;
-    renderText(ctx, Math.round(times[i]), diagramX + (DIAGRAM_WIDTH / 2),DIAGRAM_POS.y + columnHeight - PLAYER_TIME_GAP_Y, 'black');
-    renderText(ctx, names[i], diagramX + (DIAGRAM_WIDTH / 2), DIAGRAM_POS.y + PLAYER_NAME_GAP_Y, 'black');
-    renderDiagram(ctx, diagramX, diagramY, DIAGRAM_WIDTH, columnHeight, renderColor(names[i]));
+    var dataDiagram = {
+      diagramX: DIAGRAM_POS.x + (DIAGRAM_WIDTH + DIAGRAM_GAP) * i,
+      diagramY: DIAGRAM_POS.y,
+      width: DIAGRAM_WIDTH,
+      height: (-DIAGRAM_MAX_HEIGHT * times[i]) / maxTime,
+      text: names[i],
+      times: times[i],
+      color: 'black',
+    };
+    renderDiagram(ctx, dataDiagram);
   }
 };
 
@@ -94,3 +97,4 @@ window.renderStatistics = function (ctx, names, times) {
 
   renderColumns(ctx, names, times);
 }
+
