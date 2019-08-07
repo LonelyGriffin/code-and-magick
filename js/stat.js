@@ -71,16 +71,14 @@ var renderColumns = function (ctx, names, times) {
   var maxTime = maxValue(times);
 
   for (i = 0; i < names.length; i++) {
-    var dataDiagram = {
+    renderDiagram(ctx, {
       diagramX: DIAGRAM_POS.x + (DIAGRAM_WIDTH + DIAGRAM_GAP) * i,
       diagramY: DIAGRAM_POS.y,
       width: DIAGRAM_WIDTH,
       height: (-DIAGRAM_MAX_HEIGHT * times[i]) / maxTime,
       text: names[i],
       times: times[i],
-      color: 'black',
-    };
-    renderDiagram(ctx, dataDiagram);
+      color: 'black'});
   }
 };
 
