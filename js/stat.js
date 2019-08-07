@@ -36,14 +36,12 @@ var renderCloud = function (ctx, x, y, color) {
 };
 
 var renderColor = function (playerName) {
-  var colorDiagram;
   if (playerName === 'Вы') {
-    colorDiagram = 'rgba(255, 0, 0, 1)';
+    return 'rgba(255, 0, 0, 1)';
   } else {
     var saturation = Math.random(1) * 100;
-    colorDiagram = 'hsl(250, ' + saturation + '%, 50%';
+    return 'hsl(250, ' + saturation + '%, 50%';
   }
-  return colorDiagram;
 };
 
 var renderDiagram = function (ctx, data) {
@@ -78,7 +76,8 @@ var renderColumns = function (ctx, names, times) {
       height: (-DIAGRAM_MAX_HEIGHT * times[i]) / maxTime,
       text: names[i],
       times: times[i],
-      color: 'black'});
+      color: 'black'
+    });
   }
 };
 
