@@ -84,17 +84,17 @@ var closePopup = function () {
 };
 
 var onCoatClick = function() {
-  wizardCoat.style.fill = COAT_COLORS[Math.floor(Math.random() * COAT_COLORS.length)];
+  wizardCoat.style.fill = getRandomItem(COAT_COLORS);
   coatHidden.value = wizardCoat.style.fill;
 };
 
 var onEyesClick = function() {
-  wizardEyes.style.fill = EYES_COLORS[Math.floor(Math.random() * EYES_COLORS.length)];
+  wizardEyes.style.fill = getRandomItem(EYES_COLORS);
   eyesHidden.value = wizardEyes.style.fill;
 };
 
 var onFireballClick = function() {
-  fireballHidden.value = FIREBALLS[Math.floor(Math.random() * FIREBALLS.length)];
+  fireballHidden.value = getRandomItem(FIREBALLS);
   fireball.style.backgroundColor = fireballHidden.value;
 };
 
