@@ -3,7 +3,7 @@
   var dialogHandler = setup.querySelector('.upload');
   var artShop = setup.querySelector('.setup-artifacts-shop');
   var inventory = setup.querySelector('.setup-artifacts');
-  console.log(setup.offsetLeft);
+
   dialogHandler.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
 
@@ -56,6 +56,25 @@
     if (dragEvt.target.localName === 'img') {
       draggedItem = dragEvt.target;
     }
-  })
+  });
 
+  inventory.addEventListener('dragover', function (evt) {
+    evt.preventDefault();
+    return false;
+  });
+
+  inventory.addEventListener('drop', function (evt) {
+    evt.target.style.backgroundColor = '';
+    evt.target.appendChild(draggedItem);
+  });
+
+  inventory.addEventListener('dragenter', function (evt) {
+    evt.target.style.backgroundColor = 'yellow';
+    evt.preventDefault();
+  });
+
+  inventory.addEventListener('dragleave', function (evt) {
+    evt.target.style.backgroundColor = '';
+    evt.preventDefault();
+  });
 })();
