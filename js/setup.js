@@ -47,6 +47,12 @@ setupClose.addEventListener('click', function () {
 setupClose.addEventListener('keydown', function (evt) {
   ctx.press(evt, closePopup);
 });
+
+var successHandler = function () {
+
+}
+
+
 })({
   press: window.utils.isEnterClick
 });
