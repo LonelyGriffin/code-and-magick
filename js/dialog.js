@@ -7,6 +7,8 @@
   var inventory = setup.querySelector('.setup-artifacts');
   var form = setup.querySelector('.setup-wizard-form');
 
+  //var debounce = require('lodash.debounce');
+
   dialogHandler.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
 
@@ -90,10 +92,33 @@
     setup.classList.add('hidden');
   }
 
-  form.addEventListener('submit', function (evt) {
-     ctx.save(new FormData(form), onSuccess, onError, URL_SEND);
-      evt.preventDefault();
-  });
+  // function debounce(func, wait, immediate) {
+  //     var timeout;
+  //     return function() {
+  //       var context = this, args = arguments;
+  //       var later = function() {
+  //         timeout = null;
+  //         if (!immediate) func.apply(context, args);
+  //       };
+  //       var callNow = immediate && !timeout;
+  //       clearTimeout(timeout);
+  //       timeout = setTimeout(later, wait);
+  //       if (callNow) func.apply(context, args);
+  //     };
+  //   };
+
+  function testing(evt) {
+    //debugger;
+    evt.preventDefault();
+    ctx.save(new FormData(form), onSuccess, onError, URL_SEND), 950);
+    evt.stopPropagation();
+  };
+
+  //var dep = window.debounce(testing, 150);
+  form.addEventListener('submit', window.debounce(testing, 950));
+  //form.addEventListener('submit', dep, true);
+  //console.log(window.debounce);
 })({
-  save: window.backend.save
+  save: window.backend.save,
+  //debounce: window.debounce
 });
