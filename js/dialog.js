@@ -1,8 +1,11 @@
-(function () {
+(function (ctx) {
+  var URL_SEND = 'https://js.dump.academy/code-and-magick';
+
   var setup = document.querySelector('.setup');
   var dialogHandler = setup.querySelector('.upload');
   var artShop = setup.querySelector('.setup-artifacts-shop');
   var inventory = setup.querySelector('.setup-artifacts');
+  var form = setup.querySelector('.setup-wizard-form');
 
   dialogHandler.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
@@ -77,4 +80,27 @@
     evt.target.style.backgroundColor = '';
     evt.preventDefault();
   });
-})();
+
+  var onSuccess = function(data){
+    setup.classList.add('hidden');
+  }
+
+  var onError = function(message){
+    console.error(message);
+    setup.classList.add('hidden');
+  }
+
+  var saveWizardFormWithDebounce = ctx.debounce(function (form) {
+    ctx.save(form, onSuccess, onError, URL_SEND);
+  }, 300);
+
+  function testing(evt) {
+    evt.preventDefault();
+    saveWizardFormWithDebounce(new FormData(form));
+  };
+
+  form.addEventListener('submit', testing);
+})({
+  save: window.backend.save,
+  debounce: window.debounce
+});
