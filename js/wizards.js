@@ -1,34 +1,9 @@
-(function (ctx) {
-  var WIZARDS_NUMBERS = 4;
+(function (params) {
   var URL_LOAD = 'https://js.dump.academy/code-and-magick/data';
 
-  var userDialog = document.querySelector('.setup');
-  userDialog.classList.remove('hidden');
-
-  var similarSetup = document.querySelector('.setup-similar');
-  similarSetup.classList.remove('hidden');
-
-  var similarListElement = document.querySelector('.setup-similar-list');
-  var similarWizardTemplate = document.querySelector('#similar-wizard-template')
-    .content
-    .querySelector('.setup-similar-item');
-
-  var renderWizard = function (wizard) {
-    var wizardElement = similarWizardTemplate.cloneNode(true);
-    wizardElement.querySelector('.setup-similar-label').textContent = wizard.name;
-    wizardElement.querySelector('.wizard-coat').style.fill = wizard.colorCoat;
-    wizardElement.querySelector('.wizard-eyes').style.fill = wizard.colorEyes;
-    return wizardElement;
-  };
-
-  var addWizardsToSimilarList = function (wizards) {
-    var fragment = document.createDocumentFragment();
-    for (var i = 0; i < WIZARDS_NUMBERS; i++) {
-      fragment.appendChild(renderWizard(ctx.random(wizards)));
-    }
-    similarListElement.appendChild(fragment);
-
-  };
+  var coatColor;
+  var eyesColor;
+  var savedWizards = [];
 
   var errorHandler = function (errorMessage) {
     var node = document.createElement('div');
@@ -42,8 +17,46 @@
     document.body.insertAdjacentElement('afterbegin', node);
   };
 
-  ctx.load(addWizardsToSimilarList, errorHandler, URL_LOAD);
+  var getRank = function(wizard) {
+    var rank = 0;
+    if (wizard.colorCoat === coatColor) {
+      rank += 2;
+    }
+    if (wizard.colorEyes === eyesColor) {
+      rank += 1;
+    }
+    return rank;
+  };
+
+  var updateWizards = function() {
+    window.render(savedWizards.slice().sort(function (left, right) {
+      var rankDiff = getRank(right) - getRank(left);
+      if (rankDiff === 0) {
+        rankDiff = savedWizards.indexOf(left) - savedWizards.indexOf(right);
+      }
+      return rankDiff;
+    }));
+  };
+
+  var handler = function(data) {
+    savedWizards = data;
+    updateWizards();
+  };
+
+  window.wizard.onEyesChange = params.debounce(function (color) {
+    eyesColor = color;
+    updateWizards();
+  }, 300);
+
+  window.wizard.onCoatChange = params.debounce(function (color) {
+    coatColor = color;
+    updateWizards();
+  }, 300);
+
+  params.load(handler, errorHandler, URL_LOAD);
 })({
+    colorize: window.colorize,
     load: window.backend.load,
-    random: window.utils.getRandomItem
+    random: window.utils.getRandomItem,
+    debounce: window.debounce
   });

@@ -11,6 +11,7 @@
       switch (xhr.status) {
         case STATUS_OK:
           onLoad(xhr.response);
+
           break;
         case STATUS_NOT_FOUND:
           location.href = 'https://up.htmlacademy.ru/404'; //тут должно было быть что то офигенное, но пока что так :D
